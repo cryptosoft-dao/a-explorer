@@ -5,6 +5,16 @@ const explorer = {};
 explorer.utils = {};
 explorer.address = {};
 
+explorer.utils.get_ton_price = async () => {
+  const json = await fetch("https://api.coingecko.com/api/v3/coins/the-open-network/market_chart?days=2&interval=daily&vs_currency=USD&precision=4");
+  const data = await json.json();
+  return data.prices[2][1];
+}
+
+explorer.utils.time_ago = (timestamp) => {
+  //should return amount of time passed from last activity. for example:
+  return "10 years ago";
+}
 
 explorer.utils.num2str = (n) => {
   return n.toLocaleString("en-US");
@@ -43,7 +53,7 @@ explorer.address.raw2friendly = (hex, bounceable = 1, testnet = 0) => {
     hex = hex.split(":")[1];
     let bytes = [testnet ? 0x91 : bounceable ? 0x11 : 0x51, workchain ? 0xFF : 0x00];
     for (let i = 0; i < 32; i++) bytes.push(+("0x" + hex[i * 2] + hex[i * 2 + 1]));
-    const crc = explorer.crc16(bytes.slice(0, 34));
+    const crc = explorer.utils.crc16(bytes.slice(0, 34));
     bytes.push(crc[0],crc[1]);
     return btoa(String.fromCodePoint(...bytes)).replace(/\+/g, "-").replace(/\//g, "_");
   } catch (error) {
@@ -58,7 +68,7 @@ explorer.address.friendly2raw = (input) => {
     //const bounceable = (bytes[0] & 0x10) === 0x10;
     //const testnet = (bytes[0] & 0x80) === 0x80;
     const hex = bytes.slice(2, 34).reduce((acc, val) => acc + val.toString(16).padStart(2, "0"), "");
-    const crc = explorer.crc16(bytes.slice(0, 34));
+    const crc = explorer.utils.crc16(bytes.slice(0, 34));
     const crcMatch = crc[0] === bytes[34] && crc[1] === bytes[35];
     if (crcMatch) {
       return `${workchain}:${hex}`;
@@ -97,13 +107,41 @@ explorer.address.parse = (input) => {
   }
 }
 
-explorer.address.get = async (input) => {
+explorer.address.get = async (address) => {
   try {
-    const address = explorer.address.parse(input);
     const json = await fetch(`https://tonapi.io/v2/accounts/${address.raw}`);
     const data = await json.json();
     return data;
   } catch (error) {
     throw new Error("Failed to fetch data :(");
+  }
+}
+
+explorer.init = async (input) => {
+  const content = document.querySelector(".explorer .content");
+  const ton_price = await explorer.utils.get_ton_price();
+  const address = explorer.address.parse(input);
+  const address_data = await explorer.address.get(address);
+  switch(address_data.interfaces[0]) {
+    case "wallet_v4r2":
+      content.innerHTML = `
+        <div class="name">Address</div>
+        ${address.bounceable}
+        <hr>
+        <div class="name">Balance</div>
+        ${address_data.balance/1e9} ≈ ${explorer.utils.round(address_data.balance/1e9*ton_price,2)}
+        <hr>
+        <div class="name">Contract Type</div>
+        ${address_data.interfaces[0]}
+        <hr>
+        <div class="name">State</div>
+        ${address_data.status}
+        <hr>
+        <div class="name">Last activity</div>
+        ${explorer.utils.time_ago(address_data.last_activity)}
+      `;
+      break;
+    case 'case2':
+      break;
   }
 }

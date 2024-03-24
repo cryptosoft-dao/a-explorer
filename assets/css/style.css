@@ -1,0 +1,194 @@
+:root {
+  --backgroundPage: #10161f;
+  --backgroundContent: #1d2633;
+  --backgroundContentSecond: #fff;
+  --textPrimary: #fff;
+  --textInvert: #000;
+  --textSecondary: #8994a3;
+  --accentBlue: #45aef5;
+  --borderPrimary: #242e3b;
+  --blueGradient: linear-gradient(0deg, #1ac9ff, #0098ea);
+  --grayGradient: linear-gradient(90deg, transparent, #1d2633 50%, transparent);
+  --contentGradient: linear-gradient(90deg, #1d2633, transparent 50%, #1d2633);
+}
+@font-face {
+  font-family: "Montserrat";
+  src: url("../font/Montserrat.ttf") format("truetype");
+}
+/*@font-face {
+  font-family: "estedad";
+  src: url("../fonts/Estedad[KSHD,wght].woff2");
+}*/
+* {
+  padding: 0;
+  margin: 0;
+  font-family: "Montserrat";
+  /*vertical-align: text-top;*/
+  text-align: auto !important;
+  unicode-bidi: plaintext !important;
+  color: var(--textPrimary);
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+::selection {
+  background-color: var(--textPrimary);
+  color: var(--backgroundPage);
+}
+::-webkit-selection {
+  background-color: var(--textPrimary);
+  color: var(--backgroundPage);
+}
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--backgroundPage);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--borderPrimary);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--borderPrimary);
+}
+::-webkit-scrollbar-corner {
+  background: var(--backgroundPage);
+}
+::placeholder {
+  color: var(--textSecondary);
+  font-weight: 600;
+  opacity: 1;
+}
+::-ms-input-placeholder {
+  color: var(--textSecondary);
+  font-weight: 600;
+}
+html {
+  background-color: var(--backgroundPage);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  background-color: var(--backgroundPage);
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  overscroll-behavior: none;
+  overflow-y: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+img {
+  pointer-events: none;
+}
+textarea:focus, input:focus {
+  outline: none;
+}
+textarea, input, .selectable {
+  -webkit-user-select: auto;
+  -khtml-user-select: auto;
+  -moz-user-select: auto;
+  -o-user-select: auto;
+  user-select: auto;
+}
+.pixelated {
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+  -webkit-optimize-contrast: off;
+}
+
+.header {
+  overflow: auto;
+  background-color: var(--backgroundContent);
+  width: 100%;
+  height: 68px;
+}
+
+.header .content {
+  display: flex;
+  max-width: 1200px;
+  height: 68px;
+  margin: 0 auto;
+}
+
+.header .content .logo {
+  display: inline-block;
+  width: fit-content;
+  height: 34px;
+  margin: 17px;
+}
+
+.header .content .logo img {
+  height: 34px;
+}
+
+.header .content input {
+  background-color: var(--backgroundPage);
+  width: 100%;
+  height: 20px;
+  padding: 12px;
+  margin: 12px;
+  border: none;
+  border-radius: 12px;
+}
+
+.explorer {
+  overflow: auto;
+  background-color: var(--backgroundPage);
+  width: 100%;
+  max-width: 1200px;
+  min-height: calc(100% - 136px);
+  margin: 0 auto;
+}
+
+.explorer .content {
+  overflow: auto;
+  background-color: var(--backgroundContent);
+  max-width: 1200px;
+  /*min-height: calc((100vh - 68px) - 50px);*/
+  word-break: break-all;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.explorer .content .text {
+  width: 100%;
+  height: calc(100vh - 68px - 50px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.explorer .content .name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.explorer .content hr {
+  background-color: var(--borderPrimary);
+  height: 2px;
+  border-radius: 2px;
+  margin: 10px 0;
+  border: none;
+}
+
+.footer {
+  background-color: var(--backgroundContent);
+  width: 100%;
+  height: 68px;
+}
+
+.footer .content {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 68px;
+}
