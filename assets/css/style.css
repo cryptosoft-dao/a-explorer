@@ -181,6 +181,53 @@ textarea, input, .selectable {
   border: none;
 }
 
+.explorer .content .jetton {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 38px;
+  margin: 5px 0;
+}
+
+.explorer .content .jetton .jetton_image {
+  height: 100%;
+  margin-right: 8px;
+  aspect-ratio: 1/1;
+}
+
+.explorer .content .jetton .jetton_image img {
+  width: 100%;
+  border-radius: 100%;
+}
+
+.explorer .content .jetton .jetton_name {
+  margin-right: 8px;
+}
+
+.explorer .content .nft {
+  width: 100px;
+  display: inline-block;
+}
+
+.explorer .content .nft .nft_image {
+  width: 100%;
+  aspect-ratio: 1/1;
+}
+
+.explorer .content .nft .nft_image img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.explorer .content .nft .nft_name {
+  width: calc(100% - 10px);
+  padding: 5px;
+  white-space: nowrap;
+  word-break: keep-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .footer {
   background-color: var(--backgroundContent);
   width: 100%;

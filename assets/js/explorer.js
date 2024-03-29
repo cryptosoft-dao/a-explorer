@@ -6,9 +6,13 @@ explorer.utils = {};
 explorer.address = {};
 
 explorer.utils.get_ton_price = async () => {
-  const json = await fetch("https://api.coingecko.com/api/v3/coins/the-open-network/market_chart?days=2&interval=daily&vs_currency=USD&precision=4");
-  const data = await json.json();
-  return data.prices[2][1];
+  try {
+    const json = await fetch("https://api.coingecko.com/api/v3/coins/the-open-network/market_chart?days=2&interval=daily&vs_currency=USD&precision=4");
+    const data = await json.json();
+    return data.prices[2][1];
+  } catch (error) {
+    throw new Error("Failed to fetch data :(");
+  }
 }
 
 explorer.utils.time_ago = (timestamp) => {
@@ -117,28 +121,91 @@ explorer.address.get = async (address) => {
   }
 }
 
+explorer.address.get_jettons = async (address) => {
+  try {
+    const json = await fetch(`https://api.ton.cat/v2/contracts/address/${address.bounceable}/jetton_wallets`);
+    const data = await json.json();
+    return data;
+  } catch (error) {
+    throw new Error("Failed to fetch data :(");
+  }
+}
+
+explorer.address.get_nfts = async (address) => {
+  try {
+    const json = await fetch(`https://tonapi.io/v2/accounts/${address.bounceable}/nfts`);
+    const data = await json.json();
+    return data;
+  } catch (error) {
+    throw new Error("Failed to fetch data :(");
+  }
+}
+
 explorer.init = async (input) => {
-  const content = document.querySelector(".explorer .content");
+  const content = document.querySelector(".explorer");
   const ton_price = await explorer.utils.get_ton_price();
   const address = explorer.address.parse(input);
   const address_data = await explorer.address.get(address);
   switch(address_data.interfaces[0]) {
     case "wallet_v4r2":
+      const jetton_data = await explorer.address.get_jettons(address);
+      var jettons = [];
+      for (var i=0;i<jetton_data.length;i++) {
+        if (jetton_data[i].balance>1e8) jettons.push(`
+          <div class="jetton">
+            <div class="jetton_image">
+              <img src="${jetton_data[i].jetton_meta.image.w72}">
+            </div>
+            <div class="jetton_name">
+              ${jetton_data[i].jetton_meta.name}
+            </div>
+            <div class="jetton_balance">
+              ${explorer.utils.round(jetton_data[i].balance/1e9,2)}
+            </div>
+          </div>
+        `);
+      }
+      const nft_data = await explorer.address.get_nfts(address);
+      var nfts = [];
+      for (var i=0;i<nft_data.nft_items.length;i++) {
+        nfts.push(`
+          <div class="nft">
+            <div class="nft_image">
+              <img src="${nft_data.nft_items[i].previews[2].url}">
+            </div>
+            <div class="nft_name">
+              ${nft_data.nft_items[i].metadata.name}
+            </div>
+          </div>
+        `);
+      }
       content.innerHTML = `
-        <div class="name">Address</div>
-        ${address.bounceable}
-        <hr>
-        <div class="name">Balance</div>
-        ${address_data.balance/1e9} ≈ ${explorer.utils.round(address_data.balance/1e9*ton_price,2)}
-        <hr>
-        <div class="name">Contract Type</div>
-        ${address_data.interfaces[0]}
-        <hr>
-        <div class="name">State</div>
-        ${address_data.status}
-        <hr>
-        <div class="name">Last activity</div>
-        ${explorer.utils.time_ago(address_data.last_activity)}
+        <div class="content">
+          <div class="name">Address</div>
+          ${address.bounceable}
+          <hr>
+          <div class="name">Balance</div>
+          ${address_data.balance/1e9} ≈ ${explorer.utils.round(address_data.balance/1e9*ton_price,2)}
+          <hr>
+          <div class="name">Contract Type</div>
+          ${address_data.interfaces[0]}
+          <hr>
+          <div class="name">State</div>
+          ${address_data.status}
+          <hr>
+          <div class="name">Last activity</div>
+          ${explorer.utils.time_ago(address_data.last_activity)}
+        </div>
+        <div class="content">
+          <div class="name">Jettons</div>
+          <br>
+          ${jettons.join("<hr>")}
+        </div>
+        <div class="content">
+        <div class="name">NFTs</div>
+        <br>
+          ${nfts.join("")}
+        </div>
       `;
       break;
     case 'case2':
