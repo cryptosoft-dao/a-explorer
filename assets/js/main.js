@@ -4,4 +4,7 @@ address_input.addEventListener("keydown",(event)=>{
     explorer.init(address_input.value);
   }
 });
-explorer.init("UQDuW9GLQyxAcV6pcBYn0v7Hujg8im_RDQNDjPJCNSo9pUh8");
+
+//--for testing!--//
+//explorer.init("UQDuW9GLQyxAcV6pcBYn0v7Hujg8im_RDQNDjPJCNSo9pUh8");
+//address_input.value = "UQDuW9GLQyxAcV6pcBYn0v7Hujg8im_RDQNDjPJCNSo9pUh8"

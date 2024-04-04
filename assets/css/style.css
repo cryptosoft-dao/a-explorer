@@ -205,27 +205,45 @@ textarea, input, .selectable {
 }
 
 .explorer .content .nft {
-  width: 100px;
   display: inline-block;
+  margin: 5px;
+  padding: 5px;
+  box-shadow: 0 0 0 1px var(--borderPrimary);
+  border-radius: 10px;
 }
 
 .explorer .content .nft .nft_image {
   width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
   aspect-ratio: 1/1;
 }
 
 .explorer .content .nft .nft_image img {
   width: 100%;
-  border-radius: 10px;
+  transition: transform 0.25s ease;
 }
 
-.explorer .content .nft .nft_name {
+.explorer .content .nft:hover .nft_image img {
+  transform: scale(1.25);
+}
+
+.explorer .content .nft .nft_name ,.explorer .content .nft .nft_collection {
+  font-size: smaller;
   width: calc(100% - 10px);
-  padding: 5px;
   white-space: nowrap;
   word-break: keep-all;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.explorer .content .nft .nft_name {
+  padding: 5px 5px 0 5px;
+}
+
+.explorer .content .nft .nft_collection {
+  color: var(--textSecondary);
+  padding: 0 5px 5px 5px;
 }
 
 .footer {
@@ -238,4 +256,34 @@ textarea, input, .selectable {
   max-width: 1200px;
   margin: 0 auto;
   height: 68px;
+}
+
+@media only screen and (min-width: 1200px) {
+  .explorer .content .nft {
+    width: calc(100%/8 - 20px);
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .explorer .content .nft {
+    width: calc(100%/6 - 20px);
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .explorer .content .nft {
+    width: calc(100%/4 - 20px);
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .explorer .content .nft {
+    width: calc(100%/3 - 20px);
+  }
+}
+ 
+@media only screen and (max-width: 480px) {
+  .explorer .content .nft {
+    width: calc(100%/2 - 20px);
+  }
 }

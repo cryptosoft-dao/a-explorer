@@ -147,6 +147,7 @@ explorer.init = async (input) => {
   const address = explorer.address.parse(input);
   const address_data = await explorer.address.get(address);
   switch(address_data.interfaces[0]) {
+    default:
     case "wallet_v4r2":
       const jetton_data = await explorer.address.get_jettons(address);
       var jettons = [];
@@ -167,17 +168,20 @@ explorer.init = async (input) => {
       }
       const nft_data = await explorer.address.get_nfts(address);
       var nfts = [];
-      for (var i=0;i<nft_data.nft_items.length;i++) {
-        nfts.push(`
-          <div class="nft">
+      for (var i=0;i<Math.min(nft_data.nft_items.length,32);i++) {
+        nfts.push(
+          `<div class="nft">
             <div class="nft_image">
               <img src="${nft_data.nft_items[i].previews[2].url}">
             </div>
             <div class="nft_name">
               ${nft_data.nft_items[i].metadata.name}
             </div>
-          </div>
-        `);
+            <div class="nft_collection">
+              ${nft_data.nft_items[i].collection.name}
+            </div>
+          </div>`
+        );
       }
       content.innerHTML = `
         <div class="content">
